@@ -1,0 +1,122 @@
+//tab
+$('.tab .tabLi').on('click', 'li', function() {
+	var ind = $(this).index();
+	$(this).addClass('active').siblings().removeClass('active');
+	$(this).parents('.tab').find('.tabCon>div').removeClass('active').eq(ind).addClass('active');
+})
+//回到顶部
+$(window).scroll(function() {
+	var $scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+	if($scrollTop > $(window).height() * 0.5) {
+		$('#top').stop().fadeIn('fast');
+	} else {
+		$('#top').stop().fadeOut('fast');
+	}
+})
+
+$('body').on('click', '#top', function() {
+	$('body,html').animate({
+		scrollTop: 0
+	}, 300);
+})
+
+//弹窗加载
+
+function wintxt(opt) {
+	var defaults = {
+		title: '',//标题
+		titletxt: '',//内容标题
+		txt: '',//内容
+		btna: '',//取消按钮
+		btnb: '',//确定按钮
+		callback:function(){//点击确定按钮的函数
+			
+		},
+		cancelback:function(){//点击取消按钮的函数
+			
+		}
+	}
+	var opts = $.extend(defaults, opt);
+	$('.win .winBox .con,.win .winBox .winrefer').empty();
+	if(opts.title != '') {
+		$('.win .winBox .con').append('<h3>' + opts.title + '</h3>')
+	}
+	if(opts.titletxt != '') {
+		$('.win .winBox .con').append('<h2>' + opts.titletxt + '</h2>')
+	}
+	if(opts.txt != '') {
+		$('.win .winBox .con').append('<div class="txt">' + opts.txt + '</div>')
+	}
+	if(opts.btna != '') {
+		$('.win .winBox .winrefer').append('<button class="close">' + opts.btna + '</button>')
+	}
+	if(opts.btnb != '') {
+		$('.win .winBox .winrefer').append('<button class="enter">' + opts.btnb + '</button>')
+	}
+	var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+	$('.win').addClass('show');
+	$('body').css('top',-scrollTop+'px');
+	$('body').addClass('modal-open');
+	
+	//弹窗关闭
+	$('.win .close').click(function(){
+		$(this).parents('.win').removeClass('show');
+		$('body').removeClass('modal-open');
+		$('body').removeAttr('style');
+		$(window).scrollTop(scrollTop);
+		opts.cancelback();
+	})
+	//函数执行
+	$('body').on('click', '.win .enter', function() {
+		opts.callback();
+	})
+}
+
+function selproject(){
+	var top = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+	$('.selproject').removeClass('hide');
+	$('body').css('top',-top+'px');
+	$('body').addClass('modal-open');
+	$(window).scrollTop(top);
+	//关闭
+	$('body').on('click', '.selproject .close', function() {
+		$(this).parents('.selproject').addClass('hide');
+		$('body').removeClass('modal-open');
+		$('body').removeAttr('style');
+		$(window).scrollTop(top);
+	})
+}
+
+$('.head .navbox').on('click', function(e) {
+	e.stopPropagation();
+	$('.head .nav').css('right', '-21rem');
+	$('.head .navbox').removeClass('active');
+	$('body').removeClass('modal-open');
+
+})
+
+//	搜索			
+//$('.findbox').click(function() {
+//	var txt = $(this).find('span').text();
+//	$(this).parent().css('textAlign', 'left');
+//	$(this).find('span').replaceWith('<input type="text" placeholder=' + txt + ' />');
+//	$(this).find('input').focus();
+//	$('.findbox').on('blur', 'input', function() {
+//		if($(this).val() == '') {
+//			$(this).replaceWith('<span>' + txt + '</span>');
+//		} else {
+//			$(this).replaceWith('<span>' + $(this).val() + '</span>');
+//		}
+//		$(this).parent().css('textAlign', 'center')
+//	})
+//})
+
+$('.pyproject').on('click','li>div',function(){ 
+	if($(this).parents('li').hasClass('active')){
+		$(this).parents('li').removeClass('active');
+		$(this).find('.rr i.iconfont').html('&#xe672;');
+	}else{
+		$(this).parents('li').addClass('active');
+		$(this).find('.rr i.iconfont').html('&#xe63a;');
+	}
+})
